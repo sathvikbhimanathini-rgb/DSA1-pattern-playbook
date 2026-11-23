@@ -1,0 +1,44 @@
+class Solution {
+    public int[] closestPrimes(int left, int right) {
+        boolean[] prime = new boolean[right + 1];
+
+        for (int i = 2; i <= right; i++) {
+            prime[i] = true;
+        }
+
+        for (int i = 2; i * i <= right; i++) {
+            if (prime[i]) {
+                for (int j = i * i; j <= right; j += i) {
+                    prime[j] = false;
+                }
+            }
+        }
+
+        int first = -1;
+        int second = -1;
+        int minDiff = Integer.MAX_VALUE;
+
+        for (int i = left; i <= right; i++) {
+            if (prime[i]) {
+                if (first == -1) {
+                    first = i;
+                } else {
+                    int diff = i - first;
+
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        second = i;
+                    }
+
+                    first = i;
+                }
+            }
+        }
+
+        if (second == -1) {
+            return new int[]{-1, -1};
+        }
+
+        return new int[]{second - minDiff, second};
+    }
+}
